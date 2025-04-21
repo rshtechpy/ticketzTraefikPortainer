@@ -54,14 +54,7 @@ services:
         limits:
           cpus: "1"
           memory: 2048M
-      labels:
-        - traefik.enable=true
-        - traefik.http.routers.ticketz_backend.rule=Host(`app.domain.com`) && PathPrefix(`/backend`)
-        - traefik.http.routers.ticketz_backend.entrypoints=websecure
-        - traefik.http.routers.ticketz_backend.tls.certresolver=letsencryptresolver
-        - traefik.http.services.ticketz_backend.loadbalancer.server.port=3000
-        - traefik.http.middlewares.backend-strip-prefix.stripPrefix.prefixes=/backend  
-        - traefik.http.routers.ticketz_backend.middlewares=backend-strip-prefix       
+    
 
   ticketz_frontend:
     image: ghcr.io/ticketz-oss/ticketz-frontend:latest
