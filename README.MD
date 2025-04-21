@@ -1,51 +1,51 @@
 # Ticketz Docker Stack (Traefik)
 
-This guide documents how to deploy the **Ticketz** CRM/helpdesk system using Docker Swarm, Traefik, and external PostgreSQL and Redis services.
+Esta guía documenta cómo desplegar el sistema **Ticketz** CRM/helpdesk utilizando Docker Swarm, Traefik y servicios externos de PostgreSQL y Redis.
 
-## 📦 Stack Components
+## 📦 Componentes de la Stack
 
-- **ticketz_backend** – Main backend service
-- **ticketz_frontend** – Frontend interface served over Traefik
-- **ticketz_watchtower** – Auto-updater for Docker containers
+- **ticketz_backend** – Servicio principal del backend
+- **ticketz_frontend** – Interfaz del frontend servida a través de Traefik
+- **ticketz_watchtower** – Autoactualizador de contenedores Docker
 
-All services connect through a shared external network (`my_stack_net`) and use persistent volumes for data.
+Todos los servicios se conectan a través de una red externa compartida (`my_stack_net`) y utilizan volúmenes persistentes para los datos.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Inicio Rápido
 
-### 1. Requirements
-- A public server (VPS or dedicated) with Docker and Docker Swarm initialized
-- Domain (e.g., `app.example.com`) with DNS pointing to your server
-- Open ports: 80, 443
-- A valid email for SSL certificates
+### 1. Requisitos
+- Un servidor público (VPS o dedicado) con Docker y Docker Swarm inicializado
+- Dominio (por ejemplo, `app.example.com`) apuntando por DNS a tu servidor
+- Puertos 80 y 443 abiertos
+- Un correo electrónico válido para los certificados SSL
 
-### 2. Create External Resources
-Before deploying the stack, manually create the following:
+### 2. Crear Recursos Externos
+Antes de desplegar la stack, crea manualmente lo siguiente:
 
 ```bash
-# Create Docker volumes:
+# Crear volúmenes de Docker:
 docker volume create chat1_backend_public
 docker volume create chat1_backend_private
 
-# Create external network:
+# Crear red externa:
 docker network create -d overlay --attachable my_stack_net
 ```
 
-### 3. Stack Deployment
-Save the modified `docker-compose.yaml` file (see this repo) and deploy with:
+### 3. Desplegar la Stack
+Guarda el archivo `docker-compose.yaml` modificado (ver este repositorio) y ejecútalo con:
 
 ```bash
 docker stack deploy -c docker-compose.yaml ticketz
 ```
 
-> 📌 Make sure to replace all `example.com`, credentials, and token values with your actual configuration.
+> 📌 Asegúrate de reemplazar todos los valores `example.com`, credenciales y tokens por tu configuración real.
 
 ---
 
-## 🔧 Configuration Highlights
+## 🔧 Configuración Destacada
 
-### Backend Environment:
+### Variables del Backend:
 ```env
 FRONTEND_HOST=app.example.com
 BACKEND_PATH=/backend
@@ -58,42 +58,50 @@ DB_PASS=example_password
 REDIS_URI=redis://redis:6379/4
 ```
 
-### Traefik Routing:
+### Ruteo con Traefik:
 - Frontend: `https://app.example.com`
 - Backend: `https://app.example.com/backend`
 
 ### Watchtower:
-Automatically checks and updates container images every 30 minutes.
+Verifica y actualiza automáticamente las imágenes de los contenedores cada 30 minutos.
 
 ---
 
-## 🔑 Default Credentials (Initial Setup)
-- **Username**: `admin@example.com`
-- **Password**: `123456`
+## 🔑 Credenciales por Defecto (Instalación Inicial)
+- **Usuario**: `admin@example.com`
+- **Contraseña**: `123456`
 
-> 🔒 You should immediately change the default password after logging in.
+> 🔒 Se recomienda cambiar la contraseña por defecto inmediatamente después de iniciar sesión.
 
 ---
 
-## 🛠 Maintenance
+## 🛠 Mantenimiento
 
-### Logs:
+### Ver Logs:
 ```bash
 docker service logs ticketz_ticketz_backend -f
 ```
 
-### Update Stack:
+### Actualizar la Stack:
 ```bash
 docker service update --image ghcr.io/ticketz-oss/ticketz-backend:latest ticketz_ticketz_backend
 ```
 
 ---
 
-## 📜 License
-This setup is based on the AGPL-licensed Ticketz project. Please follow its redistribution terms and retain the source code link in the UI.
+## 📜 Licencia
+Esta configuración se basa en el proyecto Ticketz licenciado bajo AGPL. Por favor, respeta los términos de redistribución y conserva el enlace al código fuente en la interfaz del sistema.
 
 ---
 
-## 🙌 Credits
-Original project: https://github.com/allgood/ticketz
+## 🙌 Créditos
+Proyecto original: https://github.com/rshtechpy
+
+---
+
+## ⭐ ¡Apóyanos!
+
+Si esta stack te resultó útil, considera dejarnos una estrella ⭐ en [GitHub](https://github.com/rshtechpy) y hacer un fork para seguir mejorándola o adaptarla a tus necesidades.
+
+¡Tu apoyo motiva y mantiene vivo este proyecto! 💪
 
